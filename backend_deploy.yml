@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend
+spec:
+  revisionHistoryLimit: 0
+  replicas: 4
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      containers:
+        - name: main
+          image: ghcr.io/ondrejsika/counter
+          ports:
+            - containerPort: 8000
+          env:
+            - name: REDIS
+              value: redis
+          resources:
+            requests:
+              cpu: 40m
+              memory: 20Mi
+            limits:
+              cpu: 200m
+              memory: 100Mi
