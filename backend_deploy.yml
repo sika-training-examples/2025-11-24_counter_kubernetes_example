@@ -21,6 +21,8 @@ spec:
           env:
             - name: REDIS
               value: redis
+            - name: SLOW_START
+              value: '20'
           resources:
             requests:
               cpu: 40m
