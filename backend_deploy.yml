@@ -13,6 +13,20 @@ spec:
       labels:
         app: backend
     spec:
+      serviceAccountName: backend
+      initContainers:
+        - name: wait-for-redis
+          image: ghcr.io/sikalabs/slu:v0.95.1
+          command:
+            - "/bin/sh"
+            - "-c"
+            - "slu wait-for tcp -a redis:6379"
+        - name: wait-for-migrations
+          image: sikalabs/kubectl
+          command:
+            - "/bin/sh"
+            - "-c"
+            - "sleep 2 && kubectl wait --for=condition=complete --timeout=600s job/backend-migrations"
       containers:
         - name: main
           image: ghcr.io/ondrejsika/counter
@@ -23,6 +37,8 @@ spec:
               value: redis
             - name: SLOW_START
               value: '20'
+            - name: EXTRA_TEXT
+              value: v3
           resources:
             requests:
               cpu: 40m
