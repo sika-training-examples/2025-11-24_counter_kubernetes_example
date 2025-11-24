@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend-go
+spec:
+  revisionHistoryLimit: 0
+  replicas: 4
+  selector:
+    matchLabels:
+      app: frontend-go
+  template:
+    metadata:
+      labels:
+        app: frontend-go
+    spec:
+      containers:
+        - name: main
+          image: ghcr.io/ondrejsika/counter-frontend-go
+          ports:
+            - containerPort: 3000
+          env:
+            - name: API_ORIGIN
+              value: http://backend
+          resources:
+            requests:
+              cpu: 20m
+              memory: 20Mi
+            limits:
+              cpu: 40m
+              memory: 40Mi
