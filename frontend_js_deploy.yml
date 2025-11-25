@@ -18,9 +18,9 @@ spec:
           image: ghcr.io/ondrejsika/counter-frontend
           ports:
             - containerPort: 3000
-          env:
-            - name: API_ORIGIN
-              value: http://backend
+          envFrom:
+            - configMapRef:
+                name: frontend
           startupProbe:
             httpGet:
               path: /api/livez
