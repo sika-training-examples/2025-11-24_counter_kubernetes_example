@@ -30,6 +30,14 @@ spec:
               value: http://backend
             - name: FAIL_ON_ERROR
               value: '1'
+          startupProbe:
+            httpGet:
+              path: /api/livez
+              port: 3000
+          livenessProbe:
+            httpGet:
+              path: /api/livez
+              port: 3000
           resources:
             requests:
               cpu: 20m
