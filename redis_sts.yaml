@@ -4,6 +4,15 @@ metadata:
   name: redis
 spec:
   serviceName: redis
+  volumeClaimTemplates:
+    - metadata:
+        name: redis
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 1Gi
   selector:
     matchLabels:
       app: redis
@@ -12,6 +21,10 @@ spec:
       labels:
         app: redis
     spec:
+      volumes:
+        - name: redis
+          persistentVolumeClaim:
+            claimName: redis
       containers:
         - name: main
           image: docker.io/library/redis:8
@@ -24,3 +37,6 @@ spec:
             limits:
               memory: 100Mi
               cpu: 100m
+          volumeMounts:
+            - name: redis
+              mountPath: /data
